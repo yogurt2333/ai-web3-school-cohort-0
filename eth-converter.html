@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETH 单位换算器</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+    background: #0d1117;
+    color: #c9d1d9;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .container {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 40px 36px;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 4px;
+    color: #f0f6fc;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #8b949e;
+    margin-bottom: 32px;
+  }
+
+  .input-group {
+    margin-bottom: 28px;
+  }
+
+  .input-group label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #58a6ff;
+    margin-bottom: 8px;
+  }
+
+  .input-wrapper {
+    display: flex;
+    align-items: center;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 0 14px;
+    transition: border-color .2s;
+  }
+
+  .input-wrapper:focus-within {
+    border-color: #58a6ff;
+    box-shadow: 0 0 0 3px rgba(88,166,255,.15);
+  }
+
+  .input-wrapper input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: #f0f6fc;
+    font-size: 1.4rem;
+    font-family: inherit;
+    padding: 14px 0;
+    width: 100%;
+  }
+
+  .unit-badge {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #8b949e;
+    padding-left: 10px;
+    border-left: 1px solid #30363d;
+    margin-left: 10px;
+    white-space: nowrap;
+  }
+
+  .results {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .result-card {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 16px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: border-color .2s;
+  }
+
+  .result-card:hover { border-color: #484f58; }
+
+  .result-label {
+    font-size: 0.8rem;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .result-value {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #7ee787;
+    word-break: break-all;
+    text-align: right;
+    max-width: 65%;
+    overflow-wrap: break-word;
+  }
+
+  .scientific {
+    font-size: 0.75rem;
+    color: #d2a8ff;
+    margin-top: 2px;
+  }
+
+  .copy-btn {
+    background: none;
+    border: 1px solid #30363d;
+    color: #8b949e;
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-family: inherit;
+    margin-left: 10px;
+    transition: all .2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .copy-btn:hover {
+    border-color: #58a6ff;
+    color: #58a6ff;
+  }
+
+  .copy-btn.copied {
+    border-color: #3fb950;
+    color: #3fb950;
+  }
+
+  .quick-btns {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .quick-btn {
+    background: #21262d;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+    cursor: pointer;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-family: inherit;
+    transition: all .2s;
+  }
+
+  .quick-btn:hover { background: #30363d; border-color: #58a6ff; }
+
+  @media (max-width: 560px) {
+    .container { padding: 24px 18px; margin: 16px; }
+    .result-value { max-width: 55%; font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Ξ ETH 单位换算器</h1>
+  <p class="subtitle">1 ETH = 10<sup>9</sup> Gwei = 10<sup>18</sup> Wei</p>
+
+  <div class="input-group">
+    <label for="ethInput">ETH</label>
+    <div class="input-wrapper">
+      <input type="text" id="ethInput" placeholder="0" autofocus>
+      <span class="unit-badge">ETH</span>
+    </div>
+    <div class="quick-btns">
+      <button class="quick-btn" onclick="setEth('0.001')">0.001</button>
+      <button class="quick-btn" onclick="setEth('0.01')">0.01</button>
+      <button class="quick-btn" onclick="setEth('1')">1</button>
+      <button class="quick-btn" onclick="setEth('10')">10</button>
+      <button class="quick-btn" onclick="setEth('32')">32</button>
+      <button class="quick-btn" onclick="setEth('100')">100</button>
+    </div>
+  </div>
+
+  <div class="results">
+    <div class="result-card">
+      <div>
+        <div class="result-label">Wei</div>
+        <div class="scientific" id="weiSci"></div>
+      </div>
+      <div style="display:flex;align-items:center;">
+        <span class="result-value" id="weiVal">0</span>
+        <button class="copy-btn" onclick="copyResult('weiVal')">复制</button>
+      </div>
+    </div>
+
+    <div class="result-card">
+      <div>
+        <div class="result-label">Gwei</div>
+        <div class="scientific" id="gweiSci"></div>
+      </div>
+      <div style="display:flex;align-items:center;">
+        <span class="result-value" id="gweiVal">0</span>
+        <button class="copy-btn" onclick="copyResult('gweiVal')">复制</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ethInput = document.getElementById('ethInput');
+const weiVal = document.getElementById('weiVal');
+const weiSci = document.getElementById('weiSci');
+const gweiVal = document.getElementById('gweiVal');
+const gweiSci = document.getElementById('gweiSci');
+
+function formatNum(n) {
+  if (n === '' || isNaN(n)) return '0';
+  const num = BigInt(n);
+  return num.toLocaleString('en-US', { useGrouping: true });
+}
+
+function formatSci(n) {
+  if (n === '' || isNaN(n)) return '';
+  const num = parseFloat(n);
+  if (num === 0) return '';
+  const exp = Math.floor(Math.log10(Math.abs(num)));
+  const mantissa = num / Math.pow(10, exp);
+  return `= ${mantissa.toFixed(2)} × 10<sup>${exp}</sup>`;
+}
+
+function convert() {
+  const raw = ethInput.value.trim();
+  if (raw === '') {
+    weiVal.textContent = '0';
+    weiSci.innerHTML = '';
+    gweiVal.textContent = '0';
+    gweiSci.innerHTML = '';
+    return;
+  }
+
+  const eth = parseFloat(raw);
+  if (isNaN(eth)) {
+    weiVal.textContent = '—';
+    weiSci.innerHTML = '';
+    gweiVal.textContent = '—';
+    gweiSci.innerHTML = '';
+    return;
+  }
+
+  const wei = eth * 1e18;
+  const gwei = eth * 1e9;
+
+  weiVal.textContent = formatNum(wei);
+  weiSci.innerHTML = formatSci(wei);
+  gweiVal.textContent = formatNum(gwei);
+  gweiSci.innerHTML = formatSci(gwei);
+}
+
+ethInput.addEventListener('input', convert);
+
+function setEth(val) {
+  ethInput.value = val;
+  convert();
+  ethInput.focus();
+}
+
+async function copyResult(id) {
+  const text = document.getElementById(id).textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+    const btn = document.getElementById(id).nextElementSibling;
+    btn.textContent = '已复制!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '复制';
+      btn.classList.remove('copied');
+    }, 1200);
+  } catch {
+    /* clipboard not available */
+  }
+}
+
+convert();
+</script>
+
+</body>
+</html>

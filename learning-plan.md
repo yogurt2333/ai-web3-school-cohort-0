@@ -96,11 +96,11 @@ AI 有基础 → 快速过 **Module A**，重点在实验
 ---
 
 ## 📁 Week 1 交付物
-- [ ] Learning agent 配置记录（Hermes Agent ✅ 已有）
-- [ ] GitHub repo 链接 + commit 记录 ✅
-- [ ] Web3 测试网实践记录（钱包地址 / 交易哈希 / 合约地址 / 区块浏览器链接）
-- [ ] 基础概念说明：LLM → workflow → agent → 钱包 → 签名 → 交易 → 合约
-- [ ] 最小交叉实验说明
+- [x] Learning agent 配置记录（Hermes Agent ✅ 已有）
+- [x] GitHub repo 链接 + commit 记录 ✅
+- [x] Web3 测试网实践记录（钱包地址 / 交易哈希 / 区块浏览器链接）✅ `web3-testnet-practice.md`
+- [x] 基础概念说明：LLM → workflow → agent → 钱包 → 签名 → 交易 → 合约 ✅ `ai-web3-concepts.md`
+- [x] 最小交叉实验说明 ✅ `cross-experiment-ai-explains-tx.md`
 
 ## 📋 每日打卡流程
 
